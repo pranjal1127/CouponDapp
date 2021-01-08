@@ -173,7 +173,24 @@ export default class extends Component {
                   Send Crypto via Email, WhatsApp, SMS or even through a
                   traditional letter!
                 </p>
+                <button type="button" className="btn btn-light "
+                  onClick = {()=>{
+                    if (navigator.share) {
+                      navigator.share({
+                          title: 'Coupon Code',
+                          text: this.state.Encodevalue,
+                          url: 'https://coupondapp.com/redeem',
+                        })
+                        .then(() => console.log('Successful share'))
+                        .catch((error) => console.log('Error sharing', error));
+                    } else {
+                      console.log('Share not supported on this browser, do it the old way.');
+                    }
+                  }}
+                
+                ><i className="fa fa-share" aria-hidden="true"></i> Share</button>
               </div>
+              
             </div>
           </div>
           <div className="col-12 col-lg-5 offset-1 align-self-center">
