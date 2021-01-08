@@ -9,11 +9,11 @@ export default function ConnectWallet() {
   const [Address, setAddress] = useState("");
   const [detail, setDetail] = useState({ name: "", balance: "" });
 
-  async function resolveUserName(address:string) {
+  async function resolveUserName(address: string) {
     const name = ethers.utils.parseBytes32String(
       await window.providerESN.call({
-        to: '0xe1347dAAffbd3102F6CD67edAEA9dfc8A8C4FaDB',
-        data: '0x1f70693c' + ethers.utils.hexZeroPad(address, 32).substring(2),
+        to: "0xe1347dAAffbd3102F6CD67edAEA9dfc8A8C4FaDB",
+        data: "0x1f70693c" + ethers.utils.hexZeroPad(address, 32).substring(2),
       })
     );
     return name;
@@ -232,10 +232,7 @@ export default function ConnectWallet() {
   return (
     <React.Fragment>
       <Dropdown className="navbar-element">
-        <Dropdown.Toggle
-          variant="outline-light"
-          id="dropdown-basic"
-        >
+        <Dropdown.Toggle variant="outline-light" id="dropdown-basic">
           {!Address ? (
             "Connect to Wallet"
           ) : (

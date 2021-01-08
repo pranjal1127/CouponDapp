@@ -1,22 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 export default class extends Component {
   render = () => (
     <>
-
-	<section className="main_slider_area banner">
-    <div className="container">
-      <div className="row">
-          <div className="col-md-6">
-            <p>It`s Middlemen-free <span className="line"></span></p>
-            <h2>Send Eraswap Token to anyone <span>With CouponDApp, Simply</span></h2>
-            <h6>CouponDApp offers a solution that allows user to send Era Swap Tokens via unique file through E-mail 
-                            </h6>
+      <section className="main_slider_area banner">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <p>
+                It`s Middlemen-free <span className="line"></span>
+              </p>
+              <h2>
+                Send Eraswap Token to anyone{" "}
+                <span>With CouponDApp, Simply</span>
+              </h2>
+              <h6>
+                CouponDApp offers a solution that allows user to send Era Swap
+                Tokens via unique file through E-mail
+              </h6>
+            </div>
+            <div className="col-md-6"></div>
           </div>
-          <div className="col-md-6"></div>
-      </div>
-    </div>
-  </section>
+        </div>
+      </section>
 
       <section
         className="our_company_area our_company_two pad_top p_100 works "
@@ -53,7 +59,12 @@ export default class extends Component {
             <div className="col-lg-4 col-sm-6">
               <div className="company_item">
                 <div className="company_text">
-                  <img src="img/share.png" alt = "share" className="" height="120" />
+                  <img
+                    src="img/share.png"
+                    alt="share"
+                    className=""
+                    height="120"
+                  />
                   <h4>Share File</h4>
                   <p>
                     Then share generated unique file to the receiver, who will
@@ -89,7 +100,7 @@ export default class extends Component {
                 quickly and efficiently. Coupon Dapp is powered on a
                 decentralized network of Era Swap; hence there are no central
                 authority or any unnecessary middlemen and international
-                transaction charges, charged to the users.{' '}
+                transaction charges, charged to the users.{" "}
               </p>
               <p>
                 Coupon Dapp is one of a dApp from multiple unique dApps of Era

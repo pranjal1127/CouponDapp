@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Modal,
   Button,
@@ -9,27 +9,27 @@ import {
   Badge,
   Card,
   Form,
-} from 'react-bootstrap';
-const  network  = 5197
+} from "react-bootstrap";
+const network = 5197;
 
-const ethers = require('ethers');
+const ethers = require("ethers");
 
 export default class extends Component {
   state = {
-    userAddress: '',
-    contractAddress: '',
+    userAddress: "",
+    contractAddress: "",
     currentScreen: 0,
-    esTokensToBet: '',
-    exaEsTokensToBet: '',
+    esTokensToBet: "",
+    exaEsTokensToBet: "",
     estimating: false,
-    estimationError: '',
+    estimationError: "",
     estimatedGas: 0,
     ethGasStation: {},
     selectedGwei: 0,
     stakingPlan: undefined,
     transactionStatus: 0,
-    transactionError: '',
-    hash: '',
+    transactionError: "",
+    hash: "",
   };
 
   componentDidUpdate = async (prevProps) => {
@@ -40,7 +40,7 @@ export default class extends Component {
         this.showEstimateGasScreen();
       }
       if (this.props.ethereum.stakingPlan !== undefined) {
-        console.log('soham', this.props.ethereum.stakingPlan);
+        console.log("soham", this.props.ethereum.stakingPlan);
         this.setState({ stakingPlan: this.props.ethereum.stakingPlan });
       }
     }
@@ -49,7 +49,7 @@ export default class extends Component {
   showEstimateGasScreen = async () => {
     this.setState({
       estimating: true,
-      estimationError: '',
+      estimationError: "",
       userAddress: window.wallet.address.toLowerCase(),
       contractAddress: this.props.ethereum.contract.address,
     });
@@ -69,14 +69,14 @@ export default class extends Component {
         console.log(ethGasStationResponse);
         await this.setState({
           ethGasStation: [
-            ethGasStationResponse['safeLow'] / 10,
-            ethGasStationResponse['average'] / 10,
-            ethGasStationResponse['fast'] / 10,
-            ethGasStationResponse['fastest'] / 10, 
+            ethGasStationResponse["safeLow"] / 10,
+            ethGasStationResponse["average"] / 10,
+            ethGasStationResponse["fast"] / 10,
+            ethGasStationResponse["fastest"] / 10,
           ],
         });
       } catch (err) {
-        console.log('Eth Gas Station API error:', err.message); 
+        console.log("Eth Gas Station API error:", err.message);
         await this.setState({ ethGasStation: [10, 15, 20, 25] });
       }
       this.setState({
@@ -97,7 +97,7 @@ export default class extends Component {
     this.setState({
       currentScreen: 3,
       transactionStatus: 1,
-      transactionError: '',
+      transactionError: "",
     });
     const start = new Date();
     try {
@@ -107,7 +107,7 @@ export default class extends Component {
       const response = await this.props.ethereum.transactor(...args, {
         gasPrice: ethers.utils.parseUnits(
           String(this.state.selectedGwei),
-          'gwei'
+          "gwei"
         ),
       });
       console.log(response, `time taken: ${new Date() - start}`);
@@ -115,7 +115,7 @@ export default class extends Component {
       await response.wait();
       this.setState({ transactionStatus: 3 });
     } catch (err) {
-      console.log('Error from blockchain:' + err.message);
+      console.log("Error from blockchain:" + err.message);
       this.setState({ transactionError: err.message });
     }
   };
@@ -127,13 +127,13 @@ export default class extends Component {
         <Modal.Body>
           {this.state.estimationError ? (
             <Alert variant="danger">
-              There was this error while estimating:{' '}
+              There was this error while estimating:{" "}
               {this.state.estimationError}
             </Alert>
           ) : null}
           {this.state.estimationError &&
           this.props.ethereum.directGasScreen ? null : (
-            <div style={{ display: 'block', textAlign: 'center' }}>
+            <div style={{ display: "block", textAlign: "center" }}>
               <Button
                 onClick={this.showEstimateGasScreen}
                 disabled={this.state.estimating}
@@ -145,12 +145,12 @@ export default class extends Component {
                     size="sm"
                     role="status"
                     aria-hidden="true"
-                    style={{ marginRight: '2px' }}
+                    style={{ marginRight: "2px" }}
                   />
                 ) : null}
                 {this.state.estimating
-                  ? 'Estimating Gas...'
-                  : 'Estimate Network Fees'}
+                  ? "Estimating Gas..."
+                  : "Estimate Network Fees"}
               </Button>
             </div>
           )}
@@ -158,42 +158,42 @@ export default class extends Component {
       );
     } else if (this.state.currentScreen === 1) {
       screenContent = (
-        <Modal.Body style={{ padding: '15px' }}>
-          From: Your address{' '}
+        <Modal.Body style={{ padding: "15px" }}>
+          From: Your address{" "}
           <strong>
             {this.state.userAddress.slice(0, 6) +
-              '..' +
+              ".." +
               this.state.userAddress.slice(this.state.userAddress.length - 3)}
           </strong>
           <br />
-          To:{' '}
+          To:{" "}
           {this.props.ethereum.contractName
             ? this.props.ethereum.contractName
-            : 'TimeAlly'}{' '}
-          address{' '}
+            : "TimeAlly"}{" "}
+          address{" "}
           <strong>
             {this.state.contractAddress.slice(0, 6) +
-              '..' +
+              ".." +
               this.state.contractAddress.slice(
                 this.state.contractAddress.length - 3
               )}
           </strong>
           <Card
             style={{
-              display: 'block',
-              padding: '15px 15px 30px',
-              marginTop: '5px',
+              display: "block",
+              padding: "15px 15px 30px",
+              marginTop: "5px",
             }}
           >
             {this.props.ethereum.functionName ? (
               <Badge variant="dark">{this.props.ethereum.functionName}</Badge>
             ) : null}
-            <span style={{ display: 'block', fontSize: '1.8rem' }}>
+            <span style={{ display: "block", fontSize: "1.8rem" }}>
               {this.props.ethereum.reward || this.props.ethereum.ESAmount}
               <strong>ES</strong>
             </span>
             Network fee of Ethereum:
-            <span style={{ display: 'block', fontSize: '1.8rem' }}>
+            <span style={{ display: "block", fontSize: "1.8rem" }}>
               {Math.round(this.state.estimatedGas * this.state.selectedGwei) /
                 10 ** 9}
               <strong>ETH</strong>
@@ -201,11 +201,11 @@ export default class extends Component {
             <span
               onClick={() => this.setState({ currentScreen: 2 })}
               style={{
-                cursor: 'pointer',
-                display: 'inline-block',
-                float: 'right',
-                fontSize: '0.8rem',
-                textDecoration: 'underline',
+                cursor: "pointer",
+                display: "inline-block",
+                float: "right",
+                fontSize: "0.8rem",
+                textDecoration: "underline",
               }}
             >
               Advanced settings
@@ -237,15 +237,15 @@ export default class extends Component {
             }
           })()}
           <Button
-            style={{ margin: '0' }}
+            style={{ margin: "0" }}
             variant="primary"
             size="lg"
             block
             onClick={this.sendTransaction}
           >
             {window.wallet.isMetamask
-              ? 'Proceed to Metamask'
-              : 'Sign and Submit'}
+              ? "Proceed to Metamask"
+              : "Sign and Submit"}
           </Button>
           {/*<Row style={{marginTop: '12px'}}>
             <Col style={{paddingRight: '6px'}}>
@@ -258,33 +258,33 @@ export default class extends Component {
       );
     } else if (this.state.currentScreen === 2) {
       screenContent = (
-        <Modal.Body style={{ padding: '15px' }}>
+        <Modal.Body style={{ padding: "15px" }}>
           <h5>Advanced gas settings</h5>
           {[
             {
-              name: 'Slow',
+              name: "Slow",
               gwei: this.state.ethGasStation[0],
-              time: 'around 30 mins to confirm',
+              time: "around 30 mins to confirm",
             },
             {
-              name: 'Average',
+              name: "Average",
               gwei: this.state.ethGasStation[1],
-              time: 'around 10 mins to confirm',
+              time: "around 10 mins to confirm",
             },
             {
-              name: 'Fast',
+              name: "Fast",
               gwei: this.state.ethGasStation[2],
-              time: 'around 2 mins to confirm',
+              time: "around 2 mins to confirm",
             },
             {
-              name: 'Faster',
+              name: "Faster",
               gwei: this.state.ethGasStation[3],
-              time: 'around 30 secs to confirm',
+              time: "around 30 secs to confirm",
             },
           ].map((plan) => (
             <Card
-              key={'advanced-' + plan.name}
-              style={{ cursor: 'pointer', margin: '10px 0', padding: '10px' }}
+              key={"advanced-" + plan.name}
+              style={{ cursor: "pointer", margin: "10px 0", padding: "10px" }}
               onClick={() => {
                 // update the gwei being used
                 // change screen to 1
@@ -303,7 +303,7 @@ export default class extends Component {
               <Card.Text>{plan.time}</Card.Text>
             </Card>
           ))}
-          <Card style={{ margin: '10px 0', padding: '10px' }}>
+          <Card style={{ margin: "10px 0", padding: "10px" }}>
             <Card.Title>Custom Gas Price</Card.Title>
             <InputGroup className="mb-3">
               <FormControl
@@ -320,20 +320,20 @@ export default class extends Component {
               </InputGroup.Append>
             </InputGroup>
             <Card.Text>
-              Network fee:{' '}
+              Network fee:{" "}
               {Math.round(this.state.estimatedGas * this.state.selectedGwei) /
-                10 ** 9}{' '}
+                10 ** 9}{" "}
               ETH
             </Card.Text>
             <p>
-              You can refer to{' '}
+              You can refer to{" "}
               <a
-                style={{ color: 'black' }}
+                style={{ color: "black" }}
                 href="https://ethgasstation.info/"
                 target="_blank"
               >
                 Eth Gas Station
-              </a>{' '}
+              </a>{" "}
               for gas price stastics.
             </p>
             <button onClick={() => this.setState({ currentScreen: 1 })}>
@@ -344,32 +344,32 @@ export default class extends Component {
       );
     } else if (this.state.currentScreen === 3) {
       screenContent = (
-        <Modal.Body style={{ padding: '15px' }}>
+        <Modal.Body style={{ padding: "15px" }}>
           <p>
             {this.state.transactionError ? (
               <Alert variant="danger">{this.state.transactionError}</Alert>
             ) : this.state.transactionStatus === 0 ? (
-              'Your transaction is being prepared...'
+              "Your transaction is being prepared..."
             ) : this.state.transactionStatus === 1 ? (
               window.wallet.isMetamask ? (
-                'Please check MetaMask and CONFIRM to proceed...'
+                "Please check MetaMask and CONFIRM to proceed..."
               ) : (
-                'Sending your transaction to the Blockchain...'
+                "Sending your transaction to the Blockchain..."
               )
             ) : this.state.transactionStatus === 2 ? (
-              'Waiting for confirmation of the transaction...'
+              "Waiting for confirmation of the transaction..."
             ) : this.state.transactionStatus === 3 ? (
-              'Your transaction is confirmed!'
+              "Your transaction is confirmed!"
             ) : null}
           </p>
           {this.state.hash ? (
             <p>
-              You can view your transaction on{' '}
+              You can view your transaction on{" "}
               <a
                 href={`https://${
-                  network === 'homestead' ? '' : 'kovan.'
+                  network === "homestead" ? "" : "kovan."
                 }etherscan.io/tx/${this.state.hash}`}
-                style={{ color: 'black', textDecoration: 'underline' }}
+                style={{ color: "black", textDecoration: "underline" }}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -380,7 +380,7 @@ export default class extends Component {
 
           {this.state.transactionStatus === 3 ? (
             <Button
-              style={{ margin: '0' }}
+              style={{ margin: "0" }}
               variant="primary"
               size="lg"
               block
@@ -390,12 +390,12 @@ export default class extends Component {
                       this,
                       this.state.hash
                     )
-                  : () => this.props.history.push('/stakings')
+                  : () => this.props.history.push("/stakings")
               }
             >
               {this.props.ethereum.continueFunction
-                ? 'Continue'
-                : 'Go to Stakings Page'}
+                ? "Continue"
+                : "Go to Stakings Page"}
             </Button>
           ) : null}
         </Modal.Body>
@@ -406,38 +406,38 @@ export default class extends Component {
           <Modal.Body>
             <p>
               Ethereum Network Fee: <br />
-              Slow Safe:{' '}
+              Slow Safe:{" "}
               {Math.round(
                 this.state.estimatedGas * (this.state.ethGasStation[0] / 10)
               ) /
-                10 ** 9}{' '}
+                10 ** 9}{" "}
               ETH
               <br />
-              Average:{' '}
+              Average:{" "}
               {Math.round(
                 this.state.estimatedGas * (this.state.ethGasStation[1] / 10)
               ) /
-                10 ** 9}{' '}
+                10 ** 9}{" "}
               ETH
               <br />
-              Fast:{' '}
+              Fast:{" "}
               {Math.round(
                 this.state.estimatedGas * (this.state.ethGasStation[2] / 10)
               ) /
-                10 ** 9}{' '}
+                10 ** 9}{" "}
               ETH
               <br />
-              Fastest:{' '}
+              Fastest:{" "}
               {Math.round(
                 this.state.estimatedGas * (this.state.ethGasStation[3] / 10)
               ) /
-                10 ** 9}{' '}
+                10 ** 9}{" "}
               ETH
               <br />
               Click below button to sign your transaction and submit it to the
               blockchain.
             </p>
-            <div style={{ display: 'block', textAlign: 'center' }}>
+            <div style={{ display: "block", textAlign: "center" }}>
               <Button>Sign and send to Blockchain</Button>
             </div>
           </Modal.Body>
@@ -472,13 +472,13 @@ export default class extends Component {
               wordBreak:
                 this.props.ethereum.headingName &&
                 this.props.ethereum.headingName
-                  .split(' ')
+                  .split(" ")
                   .filter((word) => word.length >= 10).length > 0
-                  ? 'break-all'
-                  : 'break-word',
+                  ? "break-all"
+                  : "break-word",
             }}
           >
-            {this.props.ethereum.headingName || 'New Staking'}
+            {this.props.ethereum.headingName || "New Staking"}
           </Modal.Title>
         </Modal.Header>
         {screenContent}
