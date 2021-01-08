@@ -2,8 +2,8 @@ import { ethers } from 'ethers';
 import React, { Component } from 'react';
 import { Alert,Button,Card, FormControl } from 'react-bootstrap';
 import QRCodeScanner,{ IQRCodeValidateResponse } from './QRCodeScanner';
-import QrReader from "react-qr-reader";
 import Swal from 'sweetalert2';
+import UploadQR from './UploadQR';
 
 
 export default class extends Component {
@@ -136,6 +136,17 @@ export default class extends Component {
       this.toggleScanner();
     }
   };
+
+  public onQRCodeRead = async (data: any) => {
+    const uri = typeof data === "string" ? data : "";
+    if (uri) {
+      console.log('Coupon Code', uri);
+      
+      await this.setState({ uri });
+      await this.checkCoupon(uri);
+    }
+  };
+
   public onQRCodeError = (error: Error) => {
     throw error;
   };
@@ -170,24 +181,8 @@ export default class extends Component {
                           onClick={()=>this.setState({scanner : true})}
                         > <i className="fa fa-qrcode" aria-hidden="true"></i>{' '} Scan Coupon QR</Button>
                         <div>OR</div>
-                        <QrReader
-                            ref="reader"
-                            delay={300}
-                            onError={this.handleError}
-                            onScan={this.handleScan}
-                            facingMode='user'
-                            legacyMode={true}
-                          />
-                        {/* <input type="button"
-                          className="create-coupon-button large" 
-                          onClick={this.handleImgSubmit} value=" <i className='fa fa-camera'></i> Upload Coupon QR "
-                          /> */}
-                        <Button
-                          block
-                          className="create-coupon-button " 
-                          onClick={this.handleImgSubmit}>
-                          <i className='fa fa-camera'></i> Upload Coupon QR 
-                        </Button>
+                        <UploadQR onScan={this.onQRCodeRead}/>
+                       
                           <div>OR</div> 
 
                         <FormControl
