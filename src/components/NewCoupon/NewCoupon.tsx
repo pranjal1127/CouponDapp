@@ -4,18 +4,17 @@ import { ethers } from "ethers";
 import  QRCode  from 'qrcode.react';
 import html2canvas from 'html2canvas';
 import Swal from 'sweetalert2';
+import copy from 'copy-to-clipboard';
 
 
 export default class extends Component {
   state = {
     currentScreen: 0,
-    userBalance: null,
-    userAllowance: null,
-    esAmount: '',
+    esAmount: '0',
     inputError: '',
     couponBytes: new Uint8Array(),
     couponHash : '', 
-    Encodevalue : '55', 
+    Encodevalue : '', 
     spinner0: false,
     spinner1: false,
     showApproveTransactionModal: false,
@@ -27,8 +26,12 @@ export default class extends Component {
   intervalId = null;
 
   componentDidMount = () => {
+    if(!window.wallet)this.setState({inputError : "PLease Connect to wallet"});
     
   };
+  componentDidUpdate = () => {
+    
+  }
 
   createCoupon = async (e) => {
       e.preventDefault();
@@ -115,14 +118,15 @@ export default class extends Component {
     // var container = document.getElementById("QRCodeCard") ;
     // var container = document.body; // full page 
 
-    html2canvas(document.getElementById("QRCodeCard"), {
-      allowTaint: true,
-      useCORS: true
+    html2canvas(document.querySelector("#QRCodeCard0"), {
+      allowTaint: true,logging:true,
+      useCORS: true,
+      foreignObjectRendering: true
   }).then(function(canvas) {
       var link = document.createElement("a");
       document.body.appendChild(link);
+      link.href = canvas.toDataURL("image/png");
       link.download = "html_image.png"; 
-      link.href = canvas.toDataURL("image/png");;
       link.target = '_blank';
       link.click();
     });
@@ -130,6 +134,9 @@ export default class extends Component {
 
   componentWillUnmount = () => {
     // clearInterval(this.intervalId);
+    if(window.wallet)this.setState({inputError : ''})
+
+
   };
 
   render = () => (
@@ -237,16 +244,15 @@ export default class extends Component {
                         coupon will be activated once all the steps are
                         completed.
 
-                        <div id="QRCodeCard" className="text-center m-4 p-5 ">
-                           <br/>
+                        <div  className="text-center ">
+                          <div id="QRCodeCard0" className="border border-info rounded m-4 p-5 ">
                           <QRCode 
-                            id="QRCodeCanvas" 
-                                                       
+                            crossOrigin="anonymous"
+                            id="QRCodeCanvas"              
                             value={this.state.Encodevalue} 
                             size={256}
                             lavel = "H"
                             includeMargin={false}
-                            renderAs={"svg"}
                             imageSettings={{
                               src: "https://ipfs.eraswap.cloud/ipfs/QmddZCyGSbNpBrxLpFa2aJSq9a5UiZ6i54PDdYfWkTJkrU",  //QmYT1LCrmuYky1q6s1f91poJ8inMLmfSvsDD7DGx2miLVh",
                               x: null,
@@ -256,18 +262,23 @@ export default class extends Component {
                               excavate: false,
                             }}
                           /> 
-                          <h1 className="mt-3">
-                          <img 
-                              src="https://ipfs.eraswap.cloud/ipfs/QmcfYykQcK3r4gABeU4f7vnRVHdYW4yhPS3dzkG4QRaFEX"
-                              className="m-auto pb-2 "
-                              alt="eraswap"
-                            />500 ES</h1> 
+                            <h1 className="mt-3">
+                              <img 
+                                src="https://ipfs.eraswap.cloud/ipfs/QmcfYykQcK3r4gABeU4f7vnRVHdYW4yhPS3dzkG4QRaFEX"
+                                className="m-auto pb-2 "
+                                alt="eraswap" />
+                              {this.state.esAmount} ES
+                            </h1> 
+                          </div>
                             <p>OR</p>
-                            Copy this code 
-                            <Alert variant="info">{this.state.Encodevalue}
-                                </Alert>
-                        </div>
+                            Copy this code  <i className="fa fa-clone" onClick={() => {copy(this.state.Encodevalue);}}></i>
+                            <Alert 
+                              className="text-wrap text-monospace" 
+                              variant="info" 
+                              style={{wordWrap : "break-word"}} >{this.state.Encodevalue}
+                            </Alert>
                          
+                        </div>
                         <Button
                           disabled={this.state.spinner1}
                           block={true}
@@ -294,15 +305,15 @@ export default class extends Component {
                     return (
                       <>
                         <h3>Step 3</h3>
-                        <div id="QRCodeCard" className="text-center  m-4 p-5 ">
-                           <br/>
+                        <div  className="text-center ">
+                          <div id="QRCodeCard" className="border border-info rounded m-4 p-5">
                           <QRCode 
-                            crossorigin="anonymous"
-                            id="QRCode" 
-                            
+                            crossOrigin="anonymous"
+                            id="QRCodeCanvas"              
                             value={this.state.Encodevalue} 
                             size={256}
                             lavel = "H"
+                            includeMargin={false}
                             imageSettings={{
                               src: "https://ipfs.eraswap.cloud/ipfs/QmddZCyGSbNpBrxLpFa2aJSq9a5UiZ6i54PDdYfWkTJkrU",  //QmYT1LCrmuYky1q6s1f91poJ8inMLmfSvsDD7DGx2miLVh",
                               x: null,
@@ -312,18 +323,23 @@ export default class extends Component {
                               excavate: false,
                             }}
                           /> 
-                          <h1 className="mt-3">
-                          <img 
-                              src="https://ipfs.eraswap.cloud/ipfs/QmcfYykQcK3r4gABeU4f7vnRVHdYW4yhPS3dzkG4QRaFEX"
-                              className="m-auto pb-2 "
-                              alt="eraswap"
-                            />500 ES</h1> 
-                            <p>-----------------OR------------------</p>
-                            Copy this code 
-                            <Alert variant="info">{this.state.Encodevalue}
-                                </Alert>
+                            <h1 className="mt-3">
+                              <img 
+                                src="https://ipfs.eraswap.cloud/ipfs/QmcfYykQcK3r4gABeU4f7vnRVHdYW4yhPS3dzkG4QRaFEX"
+                                className="m-auto pb-2 "
+                                alt="eraswap" />
+                              {this.state.esAmount} ES
+                            </h1> 
+                          </div>
+                            <p>OR</p>
+                            Copy this code  <i className="fa fa-clone" onClick={() => {copy(this.state.Encodevalue);}}></i>
+                            <Alert 
+                              className="text-wrap text-monospace" 
+                              variant="info" 
+                              style={{wordWrap : "break-word"}} >{this.state.Encodevalue}
+                            </Alert>
+                         
                         </div>
-                        
                         {!this.state.newCouponTxHash ? (
                           <>
 
