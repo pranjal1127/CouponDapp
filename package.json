@@ -33,7 +33,11 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "style-check": "prettier --check",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start:dev": "env-cmd -f .env.development react-scripts start",
+    "start:staging": "env-cmd -f .env.staging react-scripts start",
+    "build:staging": "env-cmd -f .env.staging npm react-scripts build",
+    "build:prod": "env-cmd -f .env.production react-scripts build"
   },
   "eslintConfig": {
     "extends": "react-app"
