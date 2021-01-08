@@ -179,7 +179,9 @@ export default class extends Component {
                       navigator.share({
                           title: 'Coupon Code',
                           text: this.state.Encodevalue,
-                          url: 'https://coupondapp.com/redeem',
+                          url: `Redeem your coupon at https://coupondapp.com/redeem . \n
+                          Code : ${this.state.Encodevalue}
+                          `,
                         })
                         .then(() => console.log('Successful share'))
                         .catch((error) => console.log('Error sharing', error));
